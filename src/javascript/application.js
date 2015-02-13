@@ -8,10 +8,11 @@
 // The field filter tag:new can be used in album searches to retrieve only albums released in the last two weeks. The field filter tag:hipster can be used in album searches to retrieve only albums with the lowest 10% popularity.
 // Other possible field filters, depending on object types being searched, include genre, upc, and isrc. For example, q=damian+genre:reggae-pop&type=artist.
 
-var SEARCH_URL = "https://api.spotify.com/v1/search/?type=track&q="
-var GET_MUSIC_URL = "https://api.spotify.com/v1/tracks/{id}"
+var SEARCH_URL = "https://api.spotify.com/v1/search/?type=track&q=";
+var GET_MUSIC_URL = "https://api.spotify.com/v1/tracks/";
+var actual_song_id;
 
-var prueba = function give_me_track(track_name, callback) {
+var get_track_info = function give_me_track(track_name, callback) {
  	var url = SEARCH_URL + track_name;
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', encodeURI(url));
@@ -28,37 +29,55 @@ var prueba = function give_me_track(track_name, callback) {
 };
 
 function show_track_info(artist, track) {
-	// debugger;
 	document.querySelector(".title").innerHTML = track;
 	document.querySelector(".author").innerHTML = artist;
+}
+
+function handle_song_loading(response){
+	// Change the image to the album's one
+	var image_url = response.album.images[0].url;
+	document.querySelector(".cover img").setAttribute("src", image_url);
+	// Set the origin URL of the preview
+}
+
+function load_song(id, callback) {
+	var url = GET_MUSIC_URL + id;
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', encodeURI(url));
+	xhr.send();
+	xhr.onload = function(event) {
+	    if (xhr.status === 200) {
+			var response = JSON.parse(event.target.response);
+			console.log("Track found & loaded!");
+			callback(response);
+	    }
+	    else {
+	        alert('Request failed.  Returned status of ' + xhr.status);
+	    }
+	};	
 }
 
 function getSongId(response) {
 	var track_info = response.tracks.items[0];
 	var artist = track_info.artists[0].name;
 	var track = track_info.name;
-	// PUT ARTIST NAME ON BROWSER
-	// PUT TRACK NAME ON BROWSER
+	track_id = track_info.id;
+	// Update the track info in screen
 	show_track_info(artist, track);
-	
-	var track_id = track_info.id;
-
-
-	console.log("Artist: " + artist);
-	console.log("Song found: " + track);
-	console.log("ID: " + track_id);
+	load_song(track_id, handle_song_loading);
+	// console.log("Artist: " + artist);
+	// console.log("Song found: " + track);
+	// console.log("ID: " + track_id);
 }
 
-prueba("The Message", getSongId);
+function playSong() {
+	// TODO
+	console.log("playSong called!");
+}
 
+get_track_info("The Message", getSongId);
 
-// spotifySongSearch( "run like hell", getSongId );
+play_btn = document.querySelector(".btn-play");
+audio_player = document.querySelector("#audio");
 
-
-// function getSongId(response){
-//     getSongById(response.tracks.items[0].id, songReceivedHandler);
-// }
-
-// play_btn = document.getElementByClassName("btn-play");
-
-// play_btn.on("click", AQUIEN, give_me_artist);
+// play_btn.on("click", audio_player, playSong);
