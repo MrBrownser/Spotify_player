@@ -10,9 +10,14 @@
 
 var SEARCH_URL = "https://api.spotify.com/v1/search/?type=track&q=";
 var GET_MUSIC_URL = "https://api.spotify.com/v1/tracks/";
-var actual_song_id;
 
-var get_track_info = function give_me_track(track_name, callback) {
+audio_player = document.querySelector("#audio");
+play_btn = document.querySelector(".btn-play");
+search_btn = document.querySelector("#search-btn");
+search_field = document.querySelector("#search-field");
+
+function give_me_track(track_name, callback) {
+	play_btn.classList.add('disabled');
  	var url = SEARCH_URL + track_name;
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', encodeURI(url));
@@ -38,6 +43,8 @@ function handle_song_loading(response){
 	var image_url = response.album.images[0].url;
 	document.querySelector(".cover img").setAttribute("src", image_url);
 	// Set the origin URL of the preview
+	audio_player.setAttribute("src", response.preview_url);
+	play_btn.classList.remove('disabled');
 }
 
 function load_song(id, callback) {
@@ -65,19 +72,18 @@ function getSongId(response) {
 	// Update the track info in screen
 	show_track_info(artist, track);
 	load_song(track_id, handle_song_loading);
-	// console.log("Artist: " + artist);
-	// console.log("Song found: " + track);
-	// console.log("ID: " + track_id);
 }
 
 function playSong() {
-	// TODO
-	console.log("playSong called!");
+	audio_player.play();
 }
 
-get_track_info("The Message", getSongId);
+function handle_track_query() {
+	query = search_field.value;
+	give_me_track(query, getSongId);
+}
 
-play_btn = document.querySelector(".btn-play");
-audio_player = document.querySelector("#audio");
+// get_track_info("The Message", getSongId);
 
-// play_btn.on("click", audio_player, playSong);
+play_btn.addEventListener("click", playSong);
+search_btn.addEventListener("click", handle_track_query);
