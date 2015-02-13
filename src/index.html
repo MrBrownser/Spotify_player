@@ -1,11 +1,17 @@
 <html>
   <head>
   <title>MrBrownser Spotify-miniplayer | IRONHACK - Week 5 | Final Exercise</title>
-  <link rel="stylesheet" href="styles/main.scss">
-  <script src="javascript/application.js"></script>
+  <link rel="stylesheet" href="styles/main.css">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   </head>
   <body>
+    <!-- Seeker -->
+    <div class="seeker">
+      <input type="text" placeholder="Search by artist">
+      <button id="#search-btn">Search!</button>
+    </div>
+
+    <!-- Player -->
     <div class="widget">
       <div class="header">
         <div class="btn-play disabled"></div>
@@ -25,5 +31,6 @@
       
       <audio id="audio"></audio>
     </div>
+  <script src="javascript/application.js"></script>
   </body>
 </html>
