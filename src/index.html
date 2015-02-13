@@ -1,0 +1,29 @@
+<html>
+  <head>
+  <title>MrBrownser Spotify-miniplayer | IRONHACK - Week 5 | Final Exercise</title>
+  <link rel="stylesheet" href="styles/main.scss">
+  <script src="javascript/application.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  </head>
+  <body>
+    <div class="widget">
+      <div class="header">
+        <div class="btn-play disabled"></div>
+
+        <div class="metadata">
+          <p class="title">Song title</p>
+          <p class="author">Song author</p>
+
+          <div class="seekbar">
+            <progress value="1" max="30"></progress>
+          </div>
+        </div>
+      </div>
+      <div class="cover">
+        <img src="images/default.jpg">
+      </div>
+      
+      <audio id="audio"></audio>
+    </div>
+  </body>
+</html>
