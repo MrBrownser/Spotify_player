@@ -11,10 +11,12 @@
 var SEARCH_URL = "https://api.spotify.com/v1/search/?type=track&q=";
 var GET_MUSIC_URL = "https://api.spotify.com/v1/tracks/";
 
-audio_player = document.querySelector("#audio");
-play_btn = document.querySelector(".btn-play");
-search_btn = document.querySelector("#search-btn");
-search_field = document.querySelector("#search-field");
+var audio_player = document.querySelector("#audio");
+var play_btn = document.querySelector(".btn-play");
+var search_btn = document.querySelector("#search-btn");
+var search_field = document.querySelector("#search-field");
+
+var Song_playing = false;
 
 function give_me_track(track_name, callback) {
 	play_btn.classList.add('disabled');
@@ -31,7 +33,7 @@ function give_me_track(track_name, callback) {
 	        alert('Request failed.  Returned status of ' + xhr.status);
 	    }
 	};
-};
+}
 
 function show_track_info(artist, track) {
 	document.querySelector(".title").innerHTML = track;
@@ -75,7 +77,14 @@ function getSongId(response) {
 }
 
 function playSong() {
-	audio_player.play();
+	if (play_btn.classList.contains("playing")) {
+		play_btn.classList.remove("playing");
+		audio_player.pause();
+	}
+	else{
+		play_btn.classList.add("playing");
+		audio_player.play();
+	}
 }
 
 function handle_track_query() {
@@ -83,7 +92,10 @@ function handle_track_query() {
 	give_me_track(query, getSongId);
 }
 
-// get_track_info("The Message", getSongId);
+// Progress bar animation
+document.querySelector("#audio").ontimeupdate = function() {
+	document.querySelector(".seekbar progress").value = document.querySelector("#audio").currentTime;
+};
 
 play_btn.addEventListener("click", playSong);
 search_btn.addEventListener("click", handle_track_query);
